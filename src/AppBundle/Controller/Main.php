@@ -31,8 +31,8 @@ class Main extends Controller {
             $dt_order = $request->request->get("order");
             $dt_search = $request->request->get("search");
             $em = $this->getDoctrine()->getManager();
-            $recordsTotal = $em->getRepository($this->repository)
-                    ->recordsTotal();
+            
+            $recordsTotal = $em->getRepository($this->repository)->recordsTotal();
 
             $fields = array();
             foreach ($this->fields as $field) {
@@ -44,10 +44,9 @@ class Main extends Controller {
             }
             $where = count($q) > 0 ? " WHERE " . implode(" OR ", $q) : " WHERE ".$this->prefix.".id > 0";
             $select = count($s) > 0 ? implode(",", $s) : $this->prefix.".*";
-
-            $recordsFiltered = $em->getRepository($this->repository)
-                    ->recordsFiltered($where);
-            $em = $this->getDoctrine()->getManager();
+            
+            $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($where);
+            
             $query = $em->createQuery(
                             'SELECT  ' . $select . '
                                 FROM ' . $this->repository . ' '.$this->prefix.'
