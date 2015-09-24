@@ -1,10 +1,11 @@
 (function($) {
-    $.fn.alexander = function(app,ctrl, url, custom) {
+    $.fn.alexander = function(app, ctrl, url, custom) {
         var defaults = {}
         var alexander = this;
         var $dialog = {}
         var settings = $.extend({}, defaults, custom);
-        dataTable(app,ctrl, url);
+        var dt_table;
+        dataTable(app, ctrl, url);
         function dataTable(app, ctrl, url) {
             var app = angular.module(app, ['datatables']).config(function($interpolateProvider) {
                 $interpolateProvider.startSymbol('[[').endSymbol(']]');
@@ -17,30 +18,14 @@
                     //$scope.records = response.data;
                     $scope.fields = response.fields;
                     setTimeout(function() {
-                        var table = $(alexander).dataTable({
+                        dt_table = $(alexander).dataTable({
                             "pageLength": 100,
                             "processing": true,
                             "serverSide": true,
-                            "drawCallback": function(settings) {
-                                $(alexander).find('tbody').on('click', 'tr', function() {
-                 
-                                    if ($(this).hasClass('selected')) {
-                                        $(this).removeClass('selected');
-                                    }
-                                    else {
-                                        table.$('tr.selected').removeClass('selected');
-                                        $(this).addClass('selected');
-                                    }
-                                });
-
-                            },
-                            "rowCallback": function(nRow, aData, iDataIndex) {
-
-                            },
-                            "createdRow": function(nRow, aData, iDataIndex) {
-                                $(nRow).attr('ref', aData[0]);
-                                $(nRow).attr('ng-click', "toggle()");
-                            },
+                            "initComplete": initComplete,
+                            "drawCallback": drawCallback,
+                            "rowCallback": rowCallback,
+                            "createdRow": createdRow,
                             "ajax": {
                                 "method": "post",
                                 "url": url,
@@ -49,5 +34,27 @@
                     }, 1)
                 });
             });
-        }}
+        }
+        function initComplete(settings, json) {
+            $(alexander).find('tbody').on('click', 'tr', function() {
+                if ($(this).hasClass('selected')) {
+                    $(this).removeClass('selected');
+                }
+                else {
+                    dt_table.$('tr.selected').removeClass('selected');
+                    $(this).addClass('selected');
+                }
+            });
+        }
+        function drawCallback(settings) {
+
+        }
+        function rowCallback(nRow, aData, iDataIndex) {
+
+        }
+        function createdRow(nRow, aData, iDataIndex) {
+            $(nRow).attr('ref', aData[0]);
+            $(nRow).attr('ng-click', "toggle()");
+        }
+    }
 })(jQuery);
