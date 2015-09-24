@@ -26,6 +26,7 @@ class Main extends Controller {
         $q = array();
         $s = array();
         
+        
         if ($request->request->get("length")) {
             $dt_order = $request->request->get("order");
             $dt_search = $request->request->get("search");
