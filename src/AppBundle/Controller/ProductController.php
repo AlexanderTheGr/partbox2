@@ -31,7 +31,8 @@ class ProductController extends Main {
         $this->repository = 'AppBundle:Product';
         $this->addField(array("name" => "ID", "index" => 'id'))
                 ->addField(array("name" => "Code", "index" => 'erpCode'))
-                ->addField(array("name" => "Price", "index" => 'itemPricew01'));
+                ->addField(array("name" => "Price", "index" => 'itemPricew01'))                
+                ;
         
         $json = $this->datatable();
         

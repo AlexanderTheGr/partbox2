@@ -1628,33 +1628,5 @@ class Product {
         return $this->id;
     }
 
-    /**
-     * @var \AppBundle\Entity\Route
-     */
-    private $route;
 
-
-    /**
-     * Set route
-     *
-     * @param \AppBundle\Entity\Route $route
-     *
-     * @return Product
-     */
-    public function setRoute(\AppBundle\Entity\Route $route = null)
-    {
-        $this->route = $route;
-
-        return $this;
-    }
-
-    /**
-     * Get route
-     *
-     * @return \AppBundle\Entity\Route
-     */
-    public function getRoute()
-    {
-        return $this->route;
-    }
 }

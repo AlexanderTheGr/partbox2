@@ -33,6 +33,7 @@ class CustomerController extends Main {
                 ->addField(array("name" => "Name", "index" => 'customerName'))
                 ->addField(array("name" => "ΑΦΜ", "index" => 'customerAfm'))
                 ->addField(array("name" => "Address", "index" => 'customerAddress'))
+                ->addField(array("name" => "Route", "index" => 'route:route'))
                 ;
         
         $json = $this->datatable();

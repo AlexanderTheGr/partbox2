@@ -15,8 +15,8 @@
             </options>
         </field>
         <one-to-many
-            field="products"
-            target-entity="Product"
+            field="customers"
+            target-entity="Customer"
             mapped-by="route" />
     </entity>
 </doctrine-mapping>

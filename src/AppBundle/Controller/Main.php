@@ -38,20 +38,17 @@ class Main extends Controller {
 
             foreach ($this->fields as $field) {
                 $fields[] = $field["index"];
-                if ($dt_search["value"]) {
-                    $q[] = $this->prefix . "." . $field["index"] . " LIKE '%" . addslashes(trim($dt_search["value"])) . "%'";
+                $f = explode(":", $field["index"]);
+                if (count($f) == 1) {
+                    if ($dt_search["value"]) {
+                        $q[] = $this->prefix . "." . $field["index"] . " LIKE '%" . addslashes(trim($dt_search["value"])) . "%'";
+                    }
+                    $s[] = $this->prefix . "." . $f[0];
                 }
-                $s[] = $this->prefix . "." . $field["index"];
             }
             $where = count($q) > 0 ? " WHERE " . implode(" OR ", $q) : " WHERE " . $this->prefix . ".id > 0";
             $select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
-
-
-
             $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($where);
-
-
-
             $query = $em->createQuery(
                             'SELECT  ' . $select . '
                                 FROM ' . $this->repository . ' ' . $this->prefix . '
@@ -69,7 +66,17 @@ class Main extends Controller {
         foreach ($results as $result) {
             $json = array();
             foreach ($data["fields"] as $field) {
-                $json[] = $result[$field["index"]];
+                $f = explode(":", $field["index"]);
+                if (count($f) > 1) {
+                    $obj = $em->getRepository($this->repository)->find($result["id"]);
+                    foreach ($f as $g) {
+                        if ($obj)
+                            $obj = $obj->getField($g);
+                    }
+                    $json[] = $obj;
+                } else {
+                    $json[] = $result[$field["index"]];
+                }
             }
             $json["DT_RowClass"] = "dt_row_" . strtolower($r[1]);
             $json["DT_RowId"] = 'dt_id_' . strtolower($r[1]) . '_' . $result["id"];

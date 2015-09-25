@@ -7,10 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Customer
  *
- * @ORM\Table(name="customer", indexes={@ORM\Index(name="user_id", columns={"actioneer"}), @ORM\Index(name="customer_code", columns={"customer_code"}), @ORM\Index(name="route", columns={"route"})})
+ * @ORM\Table(name="customer", indexes={@ORM\Index(name="user_id", columns={"actioneer"}), @ORM\Index(name="customer_code", columns={"customer_code"}) })
  * @ORM\Entity
  */
 class Customer {
+
+    public function getField($field) {
+        return $this->$field;
+    }
 
     /**
      * @var integer
@@ -25,13 +29,6 @@ class Customer {
      * @ORM\Column(name="group", type="integer", nullable=false)
      */
     private $group;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="route", type="integer", nullable=false)
-     */
-    private $route;
 
     /**
      * @var string
@@ -259,28 +256,6 @@ class Customer {
      */
     public function getGroup() {
         return $this->group;
-    }
-
-    /**
-     * Set route
-     *
-     * @param integer $route
-     *
-     * @return Customer
-     */
-    public function setRoute($route) {
-        $this->route = $route;
-
-        return $this;
-    }
-
-    /**
-     * Get route
-     *
-     * @return integer
-     */
-    public function getRoute() {
-        return $this->route;
     }
 
     /**
@@ -840,6 +815,32 @@ class Customer {
      */
     public function getId() {
         return $this->id;
+    }
+
+    /**
+     * @var \AppBundle\Entity\Route
+     */
+    private $route;
+
+    /**
+     * Set route
+     *
+     * @param \AppBundle\Entity\Route $route
+     *
+     * @return Customer
+     */
+    public function setRoute(\AppBundle\Entity\Route $route = null) {
+        $this->route = $route;
+        return $this;
+    }
+
+    /**
+     * Get route
+     *
+     * @return \AppBundle\Entity\Route
+     */
+    public function getRoute() {
+        return $this->route;
     }
 
 }

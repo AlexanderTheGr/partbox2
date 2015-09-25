@@ -19,11 +19,7 @@
                 <option name="unsigned"/>
             </options>
         </field>
-        <field name="route" type="integer" column="route" nullable="false">
-            <options>
-                <option name="unsigned"/>
-            </options>
-        </field>
+
         <field name="email" type="string" column="email" length="45" nullable="true">
             <options>
                 <option name="fixed"/>
@@ -142,5 +138,13 @@
                 <option name="fixed"/>
             </options>
         </field>
+        
+         <many-to-one
+            field="route"
+            target-entity="Route"
+            inversed-by="customers"
+            join-column="route">
+            <join-column name="route" referenced-column-name="id" />
+        </many-to-one>
     </entity>
 </doctrine-mapping>

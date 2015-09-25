@@ -12,13 +12,6 @@
             <index name="item_cccfxcode1" columns="item_cccfxcode1"/>
         </indexes>
         
-        <many-to-one
-            field="route"
-            target-entity="Route"
-            inversed-by="products"
-            join-column="route">
-            <join-column name="route" referenced-column-name="id" />
-        </many-to-one>
         
         <id name="id" type="integer" column="id">
             <generator strategy="IDENTITY"/>

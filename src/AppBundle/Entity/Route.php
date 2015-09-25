@@ -93,38 +93,44 @@ class Route {
         return $this->id;
     }
 
+    public function getField($field) {
+        return $this->$field;
+    }
 
     /**
-     * Add product
+     * @var \Doctrine\Common\Collections\Collection
+     */
+    private $customers;
+
+    /**
+     * Add customer
      *
-     * @param \AppBundle\Entity\Product $product
+     * @param \AppBundle\Entity\Customer $customer
      *
      * @return Route
      */
-    public function addProduct(\AppBundle\Entity\Product $product)
-    {
-        $this->products[] = $product;
+    public function addCustomer(\AppBundle\Entity\Customer $customer) {
+        $this->customers[] = $customer;
 
         return $this;
     }
 
     /**
-     * Remove product
+     * Remove customer
      *
-     * @param \AppBundle\Entity\Product $product
+     * @param \AppBundle\Entity\Customer $customer
      */
-    public function removeProduct(\AppBundle\Entity\Product $product)
-    {
-        $this->products->removeElement($product);
+    public function removeCustomer(\AppBundle\Entity\Customer $customer) {
+        $this->customers->removeElement($customer);
     }
 
     /**
-     * Get products
+     * Get customers
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getProducts()
-    {
-        return $this->products;
+    public function getCustomers() {
+        return $this->customers;
     }
+
 }
