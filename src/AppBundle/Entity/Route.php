@@ -10,8 +10,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="route")
  * @ORM\Entity
  */
-class Route
-{
+class Route {
+
     /**
      * @var string
      *
@@ -34,8 +34,11 @@ class Route
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $id;
+    protected $products;
 
-
+    public function __construct() {
+        $this->products = new ArrayCollection();
+    }
 
     /**
      * Set route
@@ -44,8 +47,7 @@ class Route
      *
      * @return Route
      */
-    public function setRoute($route)
-    {
+    public function setRoute($route) {
         $this->route = $route;
 
         return $this;
@@ -56,8 +58,7 @@ class Route
      *
      * @return string
      */
-    public function getRoute()
-    {
+    public function getRoute() {
         return $this->route;
     }
 
@@ -68,8 +69,7 @@ class Route
      *
      * @return Route
      */
-    public function setSchedule($schedule)
-    {
+    public function setSchedule($schedule) {
         $this->schedule = $schedule;
 
         return $this;
@@ -80,8 +80,7 @@ class Route
      *
      * @return string
      */
-    public function getSchedule()
-    {
+    public function getSchedule() {
         return $this->schedule;
     }
 
@@ -90,8 +89,42 @@ class Route
      *
      * @return integer
      */
-    public function getId()
-    {
+    public function getId() {
         return $this->id;
+    }
+
+
+    /**
+     * Add product
+     *
+     * @param \AppBundle\Entity\Product $product
+     *
+     * @return Route
+     */
+    public function addProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products[] = $product;
+
+        return $this;
+    }
+
+    /**
+     * Remove product
+     *
+     * @param \AppBundle\Entity\Product $product
+     */
+    public function removeProduct(\AppBundle\Entity\Product $product)
+    {
+        $this->products->removeElement($product);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProducts()
+    {
+        return $this->products;
     }
 }

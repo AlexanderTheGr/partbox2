@@ -16,42 +16,47 @@ class Main extends Controller {
         
     }
 
-    public function getData() {
+    public function datatable() {
         ini_set("memory_limit", "1256M");
         $request = Request::createFromGlobals();
-        
+
         $results = array();
         $recordsTotal = 0;
         $recordsFiltered = 0;
         $q = array();
         $s = array();
-        
-        
+
+
         if ($request->request->get("length")) {
             $dt_order = $request->request->get("order");
             $dt_search = $request->request->get("search");
             $em = $this->getDoctrine()->getManager();
-            
+
             $recordsTotal = $em->getRepository($this->repository)->recordsTotal();
 
             $fields = array();
+
             foreach ($this->fields as $field) {
                 $fields[] = $field["index"];
                 if ($dt_search["value"]) {
-                    $q[] = $this->prefix."." . $field["index"] . " LIKE '%" . addslashes(trim($dt_search["value"])) . "%'";
+                    $q[] = $this->prefix . "." . $field["index"] . " LIKE '%" . addslashes(trim($dt_search["value"])) . "%'";
                 }
-                $s[] = $this->prefix."." . $field["index"];
+                $s[] = $this->prefix . "." . $field["index"];
             }
-            $where = count($q) > 0 ? " WHERE " . implode(" OR ", $q) : " WHERE ".$this->prefix.".id > 0";
-            $select = count($s) > 0 ? implode(",", $s) : $this->prefix.".*";
-            
+            $where = count($q) > 0 ? " WHERE " . implode(" OR ", $q) : " WHERE " . $this->prefix . ".id > 0";
+            $select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
+
+
+
             $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($where);
-            
+
+
+
             $query = $em->createQuery(
                             'SELECT  ' . $select . '
-                                FROM ' . $this->repository . ' '.$this->prefix.'
+                                FROM ' . $this->repository . ' ' . $this->prefix . '
                                 ' . $where . '
-                                ORDER BY '.$this->prefix.'.' . $fields[$dt_order[0]["column"]] . ' ' . $dt_order[0]["dir"] . ' '
+                                ORDER BY ' . $this->prefix . '.' . $fields[$dt_order[0]["column"]] . ' ' . $dt_order[0]["dir"] . ' '
                     )
                     ->setMaxResults($request->request->get("length"))
                     ->setFirstResult($request->request->get("start"));
