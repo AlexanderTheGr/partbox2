@@ -36,6 +36,7 @@
             });
         }
         function initComplete(settings, json) {
+
             $(alexander).find('tbody').on('click', 'tr', function() {
                 if ($(this).hasClass('selected')) {
                     $(this).removeClass('selected');
@@ -44,6 +45,10 @@
                     dt_table.$('tr.selected').removeClass('selected');
                     $(this).addClass('selected');
                 }
+            });
+
+            $(alexander).find(".search_init").change(function() {
+                dt_table.fnFilter(this.value, $(alexander).find(".search_init").index(this));
             });
         }
         function drawCallback(settings) {

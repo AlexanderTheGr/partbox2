@@ -1,6 +1,6 @@
 <?php
 
-// src/AppBundle/Controller/customerController.php
+// src/AppBundle/Controller/LuckyController.php
 
 namespace AppBundle\Controller;
 
@@ -9,31 +9,29 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use AppBundle\Controller\Main as Main;
 
-class CustomerController extends Main {
+class OrderController extends Main {
 
     /**
-     * @Route("/customers/customer")
+     * @Route("/orders/order")
      */
     public function indexAction() {
         return $this->render('elements/datatable.twig', array(
-                    'pagename' => 'Customers',
-                    'url'=>'/customers/getdatatable',
-                    'ctrl'=>'ctrlCustomer',
-                    'app'=>'customerApp',
+                    'pagename' => 'Orders',
+                    'url'=>'/orders/getdatatable',
+                    'ctrl'=>'ctrlOrder',
+                    'app'=>'orderApp',
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
 
     /**
-     * @Route("/customers/getdatatable")
+     * @Route("/orders/getdatatable")
      */
     public function getdatatableAction(Request $request) {
-        $this->repository = 'AppBundle:Customer';
+        $this->repository = 'AppBundle:Order';
         $this->addField(array("name" => "ID", "index" => 'id'))
-                ->addField(array("name" => "Name", "index" => 'customerName','search'=>'text'))
-                ->addField(array("name" => "ΑΦΜ", "index" => 'customerAfm','search'=>'text'))
-                ->addField(array("name" => "Address", "index" => 'customerAddress','search'=>'text'))
-                ->addField(array("name" => "Route", "index" => 'route:route'))
+                ->addField(array("name" => "Code", "index" => 'customerName'))
+                ->addField(array("name" => "Price", "index" => 'insdate'))                
                 ;
         
         $json = $this->datatable();
