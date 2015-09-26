@@ -15,12 +15,14 @@ class CustomerController extends Main {
      * @Route("/customers/customer")
      */
     public function indexAction() {
+        
+        
         return $this->render('elements/datatable.twig', array(
                     'pagename' => 'Customers',
                     'url'=>'/customers/getdatatable',
                     'ctrl'=>'ctrlCustomer',
                     'app'=>'customerApp',
-                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                    //'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
 
@@ -29,12 +31,12 @@ class CustomerController extends Main {
      */
     public function getdatatableAction(Request $request) {
         $this->repository = 'AppBundle:Customer';
+        
         $this->addField(array("name" => "ID", "index" => 'id'))
                 ->addField(array("name" => "Name", "index" => 'customerName','search'=>'text'))
                 ->addField(array("name" => "ΑΦΜ", "index" => 'customerAfm','search'=>'text'))
                 ->addField(array("name" => "Address", "index" => 'customerAddress','search'=>'text'))
-                ->addField(array("name" => "Route", "index" => 'route:route'))
-                ;
+                ->addField(array("name" => "Route", "index" => 'route:route'));
         
         $json = $this->datatable();
         

@@ -11,10 +11,12 @@ class Main extends Controller {
     var $fields = array();
     var $repository;
     var $prefix = 'p';
+    var $q_or = array();
+    var $q_and = array();
+    var $where;
+    var $select;
+    
 
-    
-    
-    
     function __construct() {
         
     }
@@ -26,47 +28,48 @@ class Main extends Controller {
         $results = array();
         $recordsTotal = 0;
         $recordsFiltered = 0;
-        $q_or = array();
-        $q_and = array();
+        $this->q_or = array();
+        $this->q_and = array();
         $s = array();
 
         if ($request->request->get("length")) {
             $em = $this->getDoctrine()->getManager();
-            
+
             $dt_order = $request->request->get("order");
             $dt_search = $request->request->get("search");
-            
             $dt_columns = $request->request->get("columns");
-          
+
             $recordsTotal = $em->getRepository($this->repository)->recordsTotal();
             $fields = array();
 
-            foreach ($this->fields as $index=>$field) {
+            foreach ($this->fields as $index => $field) {
                 $fields[] = $field["index"];
                 $field_relation = explode(":", $field["index"]);
 
                 if (count($field_relation) == 1) {
                     if ($this->clearstring($dt_search["value"])) {
-                        $q_or[] = $this->prefix . "." . $field["index"] . " LIKE '%" . $this->clearstring($dt_search["value"]) . "%'";
+                        $this->q_or[] = $this->prefix . "." . $field["index"] . " LIKE '%" . $this->clearstring($dt_search["value"]) . "%'";
                     }
                     if ($this->clearstring($dt_columns[$index]["search"]["value"])) {
-                        $q_and[] = $this->prefix . "." . $this->fields[$index]["index"] . " LIKE '%" . $this->clearstring($dt_columns[$index]["search"]["value"]) . "%'";
+                        $this->q_and[] = $this->prefix . "." . $this->fields[$index]["index"] . " LIKE '%" . $this->clearstring($dt_columns[$index]["search"]["value"]) . "%'";
                     }
                     $s[] = $this->prefix . "." . $field_relation[0];
                 }
             }
-            $where = count($q_or) > 0 ? " WHERE (" . implode(" OR ", $q_or).")" : " WHERE " . $this->prefix . ".id > 0"; 
-            $where = count($q_and) > 0 ? $where ." AND (".implode(" AND ", $q_and).")" : $where;
             
-            $select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
+            $this->createWhere();
+            $this->createOrderBy($fields, $dt_order);
+            $this->createSelect($s);
 
-            $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($where);
+            $select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
+            
+            $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($this->where);
 
             $query = $em->createQuery(
-                            'SELECT  ' . $select . '
+                            'SELECT  ' . $this->select . '
                                 FROM ' . $this->repository . ' ' . $this->prefix . '
-                                ' . $where . '
-                                ORDER BY ' . $this->getOrder($fields, $dt_order)
+                                ' . $this->where . '
+                                ORDER BY ' . $this->orderBy
                     )
                     ->setMaxResults($request->request->get("length"))
                     ->setFirstResult($request->request->get("start"));
@@ -101,12 +104,23 @@ class Main extends Controller {
     }
 
     function clearstring($string) {
-        return addslashes(str_replace(array("'"),"",trim($string)));
+        return addslashes(str_replace(array("'"), "", trim($string)));
+    }
+
+    function createSelect($s) {
+        $this->select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
     }
     
-    function getOrder($fields, $dt_order) {
+    function createWhere() {
+        $this->where = count($this->q_or) > 0 ? " WHERE (" . implode(" OR ", $this->q_or) . ")" : " WHERE " . $this->prefix . ".id > 0";
+        $this->where = count($this->q_and) > 0 ? $where . " AND (" . implode(" AND ", $this->q_and) . ")" : $this->where;
+        return $this->where;
+    }
+
+    function createOrderBy($fields, $dt_order) {
         $field_order = explode(":", $fields[$dt_order[0]["column"]]);
-        return $this->prefix . '.' . $field_order[0] . ' ' . $dt_order[0]["dir"] . ' ';
+        $this->orderBy = $this->prefix . '.' . $field_order[0] . ' ' . $dt_order[0]["dir"] . ' ';
+        return $this->orderBy;
     }
 
     function addField($field = array()) {
