@@ -11,18 +11,30 @@ use AppBundle\Controller\Main as Main;
 
 class CustomerController extends Main {
 
+    
     /**
      * @Route("/customers/customer")
      */
     public function indexAction() {
-        
-        
-        return $this->render('elements/datatable.twig', array(
+       
+        return $this->render('customer/index.html.twig', array(
                     'pagename' => 'Customers',
                     'url'=>'/customers/getdatatable',
                     'ctrl'=>'ctrlCustomer',
                     'app'=>'customerApp',
-                    //'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+    }    
+    /**
+     * @Route("/customers/customer")
+     */
+    public function customerAction() {
+       
+        return $this->render('elements/datatable.twig', array(
+                    'url'=>'/customers/getdatatable',
+                    'ctrl'=>'ctrlCustomer',
+                    'app'=>'customerApp',               
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
 

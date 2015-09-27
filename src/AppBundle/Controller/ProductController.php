@@ -23,7 +23,18 @@ class ProductController extends Main {
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
-
+    
+    
+    public function productAction() {
+       
+        return $this->render('elements/datatable.twig', array(
+                    'url'=>'/product/getdatatable',
+                    'ctrl'=>'ctrlProduct',
+                    'app'=>'productApp',           
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+    }
+    
     /**
      * @Route("/product/getdatatable")
      */
