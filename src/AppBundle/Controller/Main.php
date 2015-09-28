@@ -15,7 +15,7 @@ class Main extends Controller {
     var $q_and = array();
     var $where;
     var $select;
-    
+    var $rmd;
 
     function __construct() {
         
@@ -56,13 +56,13 @@ class Main extends Controller {
                     $s[] = $this->prefix . "." . $field_relation[0];
                 }
             }
-            
+
             $this->createWhere();
             $this->createOrderBy($fields, $dt_order);
             $this->createSelect($s);
 
             $select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
-            
+
             $recordsFiltered = $em->getRepository($this->repository)->recordsFiltered($this->where);
 
             $query = $em->createQuery(
@@ -110,7 +110,7 @@ class Main extends Controller {
     function createSelect($s) {
         $this->select = count($s) > 0 ? implode(",", $s) : $this->prefix . ".*";
     }
-    
+
     function createWhere() {
         $this->where = count($this->q_or) > 0 ? " WHERE (" . implode(" OR ", $this->q_or) . ")" : " WHERE " . $this->prefix . ".id > 0";
         $this->where = count($this->q_and) > 0 ? $where . " AND (" . implode(" AND ", $this->q_and) . ")" : $this->where;
@@ -128,4 +128,32 @@ class Main extends Controller {
         return $this;
     }
 
+    function generateRandomString($length = 15) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+    }
+
+    public function tabAction($ctrl, $app, $url) {
+        return $this->render('elements/tabs.twig', array(
+                    'pagename' => 'Customers',
+                    'url' => $url,
+                    'ctrl' => $ctrl,
+                    'app' => $app,
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+    }
+    public function datatableAction($ctrl,$app,$url) {
+
+        return $this->render('elements/datatable.twig', array(
+                    'url' => $url,
+                    'ctrl' => $ctrl,
+                    'app' => $app,
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+    }
 }

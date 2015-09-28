@@ -138,7 +138,7 @@
 		if (!$.isFunction($.fn.tab)) {
 			return;
 		}
-		$('[data-toggle="tabs"] a').click(function (e) {
+		$('[data-toggle="tabs"] a').live('click',function (e) {
 			e.preventDefault();
 			$(this).tab('show');
 		});

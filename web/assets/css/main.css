@@ -82,3 +82,6 @@ table.dataTable tbody tr {
 .list-chats .chat-body strong {
     display: block;
 }
+.alexander {
+    display: none;    
+}
