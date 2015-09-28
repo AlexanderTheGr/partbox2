@@ -149,6 +149,20 @@ class Main extends Controller {
         return $randomString;
     }
 
+    public function datatableAction($ctrl, $app, $url) {
+
+        return $this->render('elements/datatable.twig', array(
+                    'url' => $url,
+                    'ctrl' => $ctrl,
+                    'app' => $app,
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+    }
+
+    public function tabAction($ctrl, $app, $url, $action) {
+        return $this->form($ctrl, $app, $url, $action);
+    }
+
     public function tabsAction($ctrl, $app, $url) {
         return $this->render('elements/tabs.twig', array(
                     'pagename' => 'Customers',
@@ -160,27 +174,10 @@ class Main extends Controller {
         ));
     }
 
-    public function datatableAction($ctrl, $app, $url) {
-
-        return $this->render('elements/datatable.twig', array(
-                    'url' => $url,
-                    'ctrl' => $ctrl,
-                    'app' => $app,
-                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
-        ));
+    public function form1() {
+        return $this->get('twig')->render('elements/forms_1.twig');
     }
-
-    public function tabAction($ctrl, $app, $url,$type) {
-        
-        return $this->render('elements/forms.twig', array(
-                    'pagename' => 'Customers',
-                    'url' => '/customers/gettab',
-                    'ctrl' => $this->generateRandomString(),
-                    'app' => $this->generateRandomString(),
-                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
-        ));
-        
-        
+    public function form2() {
+        return $this->get('twig')->render('elements/forms_2.twig');
     }
-
 }

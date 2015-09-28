@@ -43,7 +43,7 @@ class ProductController extends Main {
     public function gettabAction(Request $request) {
         $this->repository = 'AppBundle:Product';
        
-        $this->addTab(array("name" => "Name", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
+        $this->addTab(array("name" => "Name", "content"=>$this->form(), "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
         
         $json = $this->tabs();
         return new Response(

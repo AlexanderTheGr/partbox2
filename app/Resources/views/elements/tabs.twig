@@ -7,9 +7,8 @@
             </ul>
         </div><!--end .card-head -->
         <div class="card-body tab-content">
-            <div  ng-repeat="tab in tabs" class="tab-pane [[tab.active]]" id="[[tab.index]]">
+            <div  ng-repeat="tab in tabs" ng-bind-html="deliberatelyTrustDangerousSnippet(tab.content)"  class="tab-pane [[tab.active]]" id="[[tab.index]]">
                     
-                    {{ render(controller('AppBundle:Customer:tab', { 'ctrl': ctrl,'app':app,'url':url,'type':'[[tab.type]]'})) }}
                 </div>
             </div><!--end .card-body -->
         </div><!--end .card -->
