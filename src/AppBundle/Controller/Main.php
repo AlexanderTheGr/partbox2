@@ -22,7 +22,7 @@ class Main extends Controller {
         
     }
 
-    public function tab() {
+    public function tabs() {
         $data["tabs"] = $this->tabs;
         return json_encode($data);
     }
@@ -133,10 +133,12 @@ class Main extends Controller {
         $this->fields[] = $field;
         return $this;
     }
+
     function addTab($tab = array()) {
         $this->tabs[] = $tab;
         return $this;
     }
+
     function generateRandomString($length = 15) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -147,12 +149,13 @@ class Main extends Controller {
         return $randomString;
     }
 
-    public function tabAction($ctrl, $app, $url) {
+    public function tabsAction($ctrl, $app, $url) {
         return $this->render('elements/tabs.twig', array(
                     'pagename' => 'Customers',
                     'url' => $url,
                     'ctrl' => $ctrl,
                     'app' => $app,
+                    'type' => '',
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
@@ -165,6 +168,19 @@ class Main extends Controller {
                     'app' => $app,
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
+    }
+
+    public function tabAction($ctrl, $app, $url,$type) {
+        
+        return $this->render('elements/forms.twig', array(
+                    'pagename' => 'Customers',
+                    'url' => '/customers/gettab',
+                    'ctrl' => $this->generateRandomString(),
+                    'app' => $this->generateRandomString(),
+                    'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
+        ));
+        
+        
     }
 
 }

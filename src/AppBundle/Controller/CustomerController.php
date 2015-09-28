@@ -24,6 +24,7 @@ class CustomerController extends Main {
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
+
     /**
      * @Route("/customers/view")
      */
@@ -43,13 +44,16 @@ class CustomerController extends Main {
      */
     public function gettabAction(Request $request) {
         $this->repository = 'AppBundle:Customer';
-        $this->addTab(array("name" => "General", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
+        $this->addTab(array("name" => "General","type"=>"form","index" => $this->generateRandomString(), 'search' => 'text', "active" => "active"));
 
-        $json = $this->tab();
+        $json = $this->tabs();
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );
-    }    
+    }
+
+
+
     /**
      * @Route("/customers/getdatatable")
      */

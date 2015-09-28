@@ -45,7 +45,7 @@ class ProductController extends Main {
        
         $this->addTab(array("name" => "Name", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
         
-        $json = $this->tab();
+        $json = $this->tabs();
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );
