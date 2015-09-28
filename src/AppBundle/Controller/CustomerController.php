@@ -43,7 +43,7 @@ class CustomerController extends Main {
      */
     public function gettabAction(Request $request) {
         $this->repository = 'AppBundle:Customer';
-        $this->addField(array("name" => "General", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
+        $this->addTab(array("name" => "General", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
 
         $json = $this->tab();
         return new Response(

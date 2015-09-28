@@ -16,11 +16,10 @@
                 $http.get(url, "options=nodata")
                         .success(function(response) {
                     //$scope.records = response.data;
-                    $scope.fields = response.fields;
+                    $scope.tabs = response.tabs;
                     alexander.show();
                 });
             });
         }
-
     }
 })(jQuery);

@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Main extends Controller {
 
     var $fields = array();
+    var $tabs = array();
     var $repository;
     var $prefix = 'p';
     var $q_or = array();
@@ -22,11 +23,10 @@ class Main extends Controller {
     }
 
     public function tab() {
-        $data["fields"] = $this->fields;
+        $data["tabs"] = $this->tabs;
         return json_encode($data);
     }
-    
-    
+
     public function datatable() {
         ini_set("memory_limit", "1256M");
         $request = Request::createFromGlobals();
@@ -133,7 +133,10 @@ class Main extends Controller {
         $this->fields[] = $field;
         return $this;
     }
-
+    function addTab($tab = array()) {
+        $this->tabs[] = $tab;
+        return $this;
+    }
     function generateRandomString($length = 15) {
         $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         $charactersLength = strlen($characters);
@@ -153,7 +156,8 @@ class Main extends Controller {
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
-    public function datatableAction($ctrl,$app,$url) {
+
+    public function datatableAction($ctrl, $app, $url) {
 
         return $this->render('elements/datatable.twig', array(
                     'url' => $url,
@@ -162,4 +166,5 @@ class Main extends Controller {
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
+
 }
