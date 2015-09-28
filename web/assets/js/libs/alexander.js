@@ -17,7 +17,9 @@
                         .success(function(response) {
                     //$scope.records = response.data;
                     $scope.fields = response.fields;
+                    
                     setTimeout(function() {
+                        $(".card").tab();
                         dt_table = $(alexander).dataTable({
                             "pageLength": 100,
                             "processing": true,
