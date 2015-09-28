@@ -2,6 +2,7 @@
     $.fn.alexDataTable = function(app, ctrl, url, custom) {
         var defaults = {}
         var alexander = this;
+        alexander.hide();
         var $dialog = {}
         var settings = $.extend({}, defaults, custom);
         var dt_table;
@@ -17,7 +18,7 @@
                         .success(function(response) {
                     //$scope.records = response.data;
                     $scope.fields = response.fields;
-
+                    alexander.show();
                     setTimeout(function() {
 
                         dt_table = $(alexander).dataTable({

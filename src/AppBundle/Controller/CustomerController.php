@@ -43,14 +43,9 @@ class CustomerController extends Main {
      */
     public function gettabAction(Request $request) {
         $this->repository = 'AppBundle:Customer';
+        $this->addField(array("name" => "General", "content"=>"", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"));
 
-        $this->addField(array("name" => "Name", "index" => $this->generateRandomString(), 'search' => 'text',"active"=>"active"))
-                ->addField(array("name" => "ΑΦΜ", "index" => $this->generateRandomString(), 'search' => 'text'))
-                ->addField(array("name" => "Address", "index" => $this->generateRandomString(), 'search' => 'text'))
-                ->addField(array("name" => "Route", "index" => $this->generateRandomString()));
-
-        $json = $this->datatable();
-
+        $json = $this->tab();
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );
@@ -60,15 +55,12 @@ class CustomerController extends Main {
      */
     public function getdatatableAction(Request $request) {
         $this->repository = 'AppBundle:Customer';
-
         $this->addField(array("name" => "ID", "index" => 'id'))
                 ->addField(array("name" => "Name", "index" => 'customerName', 'search' => 'text'))
                 ->addField(array("name" => "ΑΦΜ", "index" => 'customerAfm', 'search' => 'text'))
                 ->addField(array("name" => "Address", "index" => 'customerAddress', 'search' => 'text'))
                 ->addField(array("name" => "Route", "index" => 'route:route'));
-
         $json = $this->datatable();
-
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );

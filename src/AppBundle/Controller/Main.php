@@ -21,6 +21,12 @@ class Main extends Controller {
         
     }
 
+    public function tab() {
+        $data["fields"] = $this->fields;
+        return json_encode($data);
+    }
+    
+    
     public function datatable() {
         ini_set("memory_limit", "1256M");
         $request = Request::createFromGlobals();
