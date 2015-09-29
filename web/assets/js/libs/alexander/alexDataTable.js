@@ -8,7 +8,7 @@
         var dt_table;
         dataTable(app, ctrl, url);
         function dataTable(app, ctrl, url) {
-            var app = angular.module(app, ['datatables']).config(function($interpolateProvider) {
+            var app = angular.module(app, []).config(function($interpolateProvider) {
                 $interpolateProvider.startSymbol('[[').endSymbol(']]');
             });
             var data = {};
