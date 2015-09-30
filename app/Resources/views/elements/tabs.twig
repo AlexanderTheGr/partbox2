@@ -1,19 +1,18 @@
 {% block body %}
-<div class="alexander {{ctrl}}" ng-app="{{app}}" ng-controller="{{ctrl}}">
-    <div class="card">
-        <div class="card-head">
-            <ul class="nav nav-tabs" data-toggle="tabs">
-                <li ng-repeat="tab in tabs" class="[[tab.active]]" ><a href="#[[tab.index]]">[[ tab.name ]]</a></li>
-            </ul>
-        </div><!--end .card-head -->
-        <div class="card-body tab-content">
-            <div  ng-repeat="tab in tabs" ng-bind-html="deliberatelyTrustDangerousSnippet(tab.content)"  class="tab-pane [[tab.active]]" id="[[tab.index]]">
-                    
-                </div>
-            </div><!--end .card-body -->
-        </div><!--end .card -->
-    </div><!--end .col -->
-    <!-- END LAYOUT LEFT ALIGNED -->
+    
+    <div class="alexander {{ctrl}}" ng-app="{{app}}" ng-controller="{{ctrl}}">
+        <form ng-submit="onSubmit()" name="form" novalidate>            
+            <tabset>
+                <tab ng-repeat="tab in tabs" heading="[[ tab.title ]]" active="tab.active" disable="tab.disable">
+
+                    <formly-form model="tab.form.model" fields="tab.form.fields" form="form" options="tab.form.options"></formly-form>
+                    <button type="submit" class="btn btn-primary submit-button" ng-disabled="form.$invalid">Submit</button>
+                    <button type="button" class="btn btn-default" ng-click="resetAllForms()">Reset</button>
+
+                </tab>
+            </tabset>  
+        </form>
+    </div>    
 {% endblock %}
 
 {% block stylesheets %}

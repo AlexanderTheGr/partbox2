@@ -35,6 +35,7 @@ class CustomerController extends Main {
                     'url' => '/customers/gettab',
                     'ctrl' => $this->generateRandomString(),
                     'app' => $this->generateRandomString(),
+                    'tabs'=> $this->gettabs(),
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
@@ -42,7 +43,7 @@ class CustomerController extends Main {
     /**
      * @Route("/customers/gettab")
      */
-    public function gettabAction(Request $request) {
+    public function gettabAction() {
         $this->repository = 'AppBundle:Customer';
         $this->addTab(array("name" => "General1","content"=>$this->form1(),"index" => $this->generateRandomString(), 'search' => 'text', "active" => "active"));
         $this->addTab(array("name" => "General2","content"=>$this->form2(),"index" => $this->generateRandomString(), 'search' => 'text'));
@@ -51,7 +52,27 @@ class CustomerController extends Main {
                 $json, 200, array('Content-Type' => 'application/json')
         );
     }
+    /**
+     * @Route("/customers/gettab")
+     */
+    public function gettabs() {
+        $this->repository = 'AppBundle:Customer';
+        
+        $forms["model"] = '$scope.model'; 
+        $forms["model"] = array();
+        //$forms["options"] = array('value'=>'aa');
+        $forms["fields"][] = array("key"=>"firstName","type"=>"input","templateOptions"=>array("label"=>"First Name","required"=>true));
+        $forms["fields"][] = array("key"=>"lastName","type"=>"input","templateOptions"=>array("label"=>"First Name","required"=>true));        
 
+        
+        //$this->addTab(array("title" => "General1","form"=>"","content"=>'fff',"index" => $this->generateRandomString(), 'search' => 'text', "active" => true));
+        $this->addTab(array("title" => "General2","form"=>$forms,"content"=>'ddd',"index" => $this->generateRandomString(), 'search' => 'text'));
+        $json = $this->tabs();
+        return $json;
+        //return new Response(
+        //        $json, 200, array('Content-Type' => 'application/json')
+        //);
+    }
 
 
     /**
