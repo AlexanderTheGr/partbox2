@@ -23,29 +23,19 @@
                     return $sce.trustAsHtml($scope.snippet);
                 };
 
-                vm.onSubmit = onSubmit;
-                vm.resetAllForms = invokeOnAllFormOptions.bind(null, 'resetModel');
+                $scope.onSubmit = onSubmit;
+                $scope.resetAllForms = invokeOnAllFormOptions.bind(null, 'resetModel');
 
-                // variable assignment
-                vm.author = {// optionally fill in your info below :-)
-                    name: 'Alexander Dimeas',
-                    url: ''
-                };
-                vm.exampleTitle = 'Bootstrap Tabs'; // add this
-                vm.env = {
-                    angularVersion: angular.version.full,
-                    formlyVersion: $scope
-                };
-
+                $scope.model = {};
                 // function definition
                 function onSubmit() {
                     invokeOnAllFormOptions('updateInitialValue');
-                    alert(JSON.stringify(vm.model), null, 2);
+                    alert(JSON.stringify($scope.model), null, 2);
                 }
 
 
                 function invokeOnAllFormOptions(fn) {
-                    angular.forEach(vm.tabs, function (tab) {
+                    angular.forEach($scope.tabs, function (tab) {
                         if (tab.form.options && tab.form.options[fn]) {
                             tab.form.options[fn]();
                         }
