@@ -43,16 +43,8 @@ class ProductController extends Main {
     public function gettabAction(Request $request) {
         $this->repository = 'AppBundle:Product';
 
-        
-        $form1[] = array("label"=>"First Name","type","text","index"=>"firstname","id"=>$this->generateRandomString());
-        $form1[] = array("label"=>"Last Name","type","text","index"=>"lastname","id"=>$this->generateRandomString());
-        $form1[] = array("label"=>"Age","type","text","index"=>"age","id"=>$this->generateRandomString());
-        
-        $content = array("type"=>"form","data"=>$form1);
-        
-        
-        $this->addTab(array("name" => "General1", "content" => $content, "index" => $this->generateRandomString(), 'search' => 'text', "active" => "active"));
-        $this->addTab(array("name" => "General2", "content" => $content, "index" => $this->generateRandomString(), 'search' => 'text'));
+        $this->addTab(array("name" => "General1", "content" => $this->form1(), "index" => $this->generateRandomString(), 'search' => 'text', "active" => "active"));
+        $this->addTab(array("name" => "General2", "content" => $this->form2(), "index" => $this->generateRandomString(), 'search' => 'text'));
 
         $json = $this->tabs();
         return new Response(
