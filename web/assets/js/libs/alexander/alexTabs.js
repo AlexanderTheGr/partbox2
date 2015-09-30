@@ -7,13 +7,14 @@
         var settings = $.extend({}, defaults, custom);
         tabs(app, ctrl, url, tab);
         function tabs(app, ctrl, url, tab) {
-            var app = angular.module(app, ['ngSanitize']).config(function ($interpolateProvider) {
+            var app = angular.module(app, ['ngSanitize', 'ui.bootstrap', 'formly', 'formlyBootstrap']).config(function ($interpolateProvider) {
                 $interpolateProvider.startSymbol('[[').endSymbol(']]');
             });
             var data = {};
             data.id = 1;
 
             app.controller(ctrl, function ($scope, $http, $sce) {
+                var vm = this;
                 var response = angular.fromJson(html_entity_decode(tab));
                 $scope.tabs = response.tabs;
                 alexander.show();
@@ -21,6 +22,36 @@
                     $scope.snippet = html;
                     return $sce.trustAsHtml($scope.snippet);
                 };
+
+                vm.onSubmit = onSubmit;
+                vm.resetAllForms = invokeOnAllFormOptions.bind(null, 'resetModel');
+
+                // variable assignment
+                vm.author = {// optionally fill in your info below :-)
+                    name: 'Alexander Dimeas',
+                    url: ''
+                };
+                vm.exampleTitle = 'Bootstrap Tabs'; // add this
+                vm.env = {
+                    angularVersion: angular.version.full,
+                    formlyVersion: $scope
+                };
+
+                // function definition
+                function onSubmit() {
+                    invokeOnAllFormOptions('updateInitialValue');
+                    alert(JSON.stringify(vm.model), null, 2);
+                }
+
+
+                function invokeOnAllFormOptions(fn) {
+                    angular.forEach(vm.tabs, function (tab) {
+                        if (tab.form.options && tab.form.options[fn]) {
+                            tab.form.options[fn]();
+                        }
+                    });
+                }
+
             });
         }
     }
