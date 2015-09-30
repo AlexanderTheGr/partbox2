@@ -1,18 +1,17 @@
 {% block body %}
-    
-    <div class="alexander {{ctrl}}" ng-app="{{app}}" ng-controller="{{ctrl}}">
-        <form ng-submit="onSubmit()" name="form" novalidate>            
-            <tabset>
-                <tab ng-repeat="tab in tabs" heading="[[ tab.title ]]" active="tab.active" disable="tab.disable">
 
-                    <formly-form model="tab.form.model" fields="tab.form.fields" form="form" options="tab.form.options"></formly-form>
-                    <button type="submit" class="btn btn-primary submit-button" ng-disabled="form.$invalid">Submit</button>
-                    <button type="button" class="btn btn-default" ng-click="resetAllForms()">Reset</button>
+<div class="alexander {{ctrl}}" ng-app="{{app}}" ng-controller="{{ctrl}} as vm">
 
-                </tab>
-            </tabset>  
-        </form>
-    </div>    
+    <form ng-submit="vm.onSubmit()" name="vm.form" class="form" novalidate>      
+        <button type="submit" class="btn btn-primary submit-button" ng-disabled="vm.form.$invalid">Submit</button>
+        <button type="button" class="btn btn-default" ng-click="vm.resetAllForms()">Reset</button>          
+        <tabset>
+            <tab ng-repeat="tab in vm.tabs" heading="[[ tab.title ]]" active="tab.active" disable="tab.disable">
+                <formly-form model="tab.form.model" fields="tab.form.fields" form="vm.form" options="tab.form.options"></formly-form>
+            </tab>
+        </tabset>  
+    </form>
+</div>    
 {% endblock %}
 
 {% block stylesheets %}

@@ -1,5 +1,5 @@
-(function ($) {
-    $.fn.alexTabs = function (app, ctrl, url, tab, custom) {
+(function($) {
+    $.fn.alexTabs = function(app, ctrl, url, tab, custom) {
         var alexander = this;
         alexander.hide();
         var defaults = {}
@@ -7,35 +7,41 @@
         var settings = $.extend({}, defaults, custom);
         tabs(app, ctrl, url, tab);
         function tabs(app, ctrl, url, tab) {
-            var app = angular.module(app, ['ngSanitize', 'ui.bootstrap', 'formly', 'formlyBootstrap']).config(function ($interpolateProvider) {
+            var app = angular.module(app, ['ngSanitize', 'ui.bootstrap', 'formly', 'formlyBootstrap', 'ngMessages']).config(function($interpolateProvider) {
                 $interpolateProvider.startSymbol('[[').endSymbol(']]');
             });
             var data = {};
             data.id = 1;
 
-            app.controller(ctrl, function ($scope, $http, $sce) {
+            app.controller(ctrl, function($scope, $http, $sce) {
                 var vm = this;
+
                 var response = angular.fromJson(html_entity_decode(tab));
-                $scope.tabs = response.tabs;
+                vm.tabs = response.tabs;
                 alexander.show();
-                $scope.deliberatelyTrustDangerousSnippet = function (html) {
+                $scope.deliberatelyTrustDangerousSnippet = function(html) {
                     $scope.snippet = html;
                     return $sce.trustAsHtml($scope.snippet);
                 };
 
-                $scope.onSubmit = onSubmit;
-                $scope.resetAllForms = invokeOnAllFormOptions.bind(null, 'resetModel');
+                vm.onSubmit = onSubmit;
+                vm.resetAllForms = invokeOnAllFormOptions.bind(null, 'resetModel');
 
-                $scope.model = {};
+                vm.model = {};
+                vm.originalTabs = angular.copy(vm.form);
+
                 // function definition
                 function onSubmit() {
                     invokeOnAllFormOptions('updateInitialValue');
-                    alert(JSON.stringify($scope.model), null, 2);
+                    alert(JSON.stringify(vm.model), null, 2);
                 }
 
 
                 function invokeOnAllFormOptions(fn) {
-                    angular.forEach($scope.tabs, function (tab) {
+                    angular.forEach(vm.tabs, function(tab) {
+                        angular.forEach(tab.form.fields, function(field, index) {
+                            vm.model[field.id] = field.value();
+                        })
                         if (tab.form.options && tab.form.options[fn]) {
                             tab.form.options[fn]();
                         }
