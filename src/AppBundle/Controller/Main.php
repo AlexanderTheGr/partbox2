@@ -174,10 +174,44 @@ class Main extends Controller {
         ));
     }
 
-    public function form1() {
-        return $this->get('twig')->render('elements/forms_1.twig');
+    function formLybase64() {
+        $json = json_encode(array("ok"));
+        $content = $this->get("request")->getContent();
+        $data = json_decode($content);
+        $post = array();
+        foreach ($data->data as $key64 => $val64) {
+            $post[base64_decode($key64)] = base64_decode($val64);
+        }
+        return $post;
     }
-    public function form2() {
-        return $this->get('twig')->render('elements/forms_2.twig');
+
+    function save() {
+        $data = $this->formLybase64();
+        $em = $this->getDoctrine()->getManager();
+        $entities = array();
+        foreach ($data as $key => $val) {
+            $df = explode(":", $key);
+            if (!@$entities[$df[0] . ":" . $df[1]]) {
+                $entities[$df[0] . ":" . $df[1]] = $this->getDoctrine()
+                        ->getRepository($df[0] . ":" . $df[1])
+                        ->find($df[3]);
+            }
+            $entities[$df[0] . ":" . $df[1]]->setField($df[2], $val);
+        }
+        foreach ($entities as $entity) {
+            $em->persist($entity);
+            $em->flush();
+        }
     }
+
+    function getFormLyFields($entity, $fields) {
+        $forms["model"] = array();
+        foreach ($fields as $field => $options) {
+            @$options["type"] = $options["type"] ? $options["type"] : "input";
+            @$options["required"] = $options["required"] ? $options["required"] : true;
+            $forms["fields"][] = array("key" => $field, "id" => $this->repository . ":" . $field . ":" . $entity->getId(), "defaultValue" => $entity->getField($field), "type" => "input", "templateOptions" => array("type" => '', "label" => $options["label"], "required" => $options["required"]));
+        }
+        return $forms;
+    }
+
 }

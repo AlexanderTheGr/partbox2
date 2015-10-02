@@ -11,6 +11,8 @@ use AppBundle\Controller\Main as Main;
 
 class CustomerController extends Main {
 
+    var $repository = 'AppBundle:Customer';
+
     /**
      * @Route("/customers/customer")
      */
@@ -26,58 +28,54 @@ class CustomerController extends Main {
     }
 
     /**
-     * @Route("/customers/view")
+     * @Route("/customers/view/{id}")
      */
-    public function viewAction() {
+    public function viewAction($id) {
 
         return $this->render('customer/view.html.twig', array(
                     'pagename' => 'Customers',
-                    'url' => '/customers/gettab',
+                    'url' => '/customers/save',
                     'ctrl' => $this->generateRandomString(),
                     'app' => $this->generateRandomString(),
-                    'tabs' => $this->gettabs(),
+                    'tabs' => $this->gettabs($id),
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
         ));
     }
 
     /**
-     * @Route("/customers/gettab")
+     * @Route("/customers/save")
      */
-    public function gettabAction() {
-        $this->repository = 'AppBundle:Customer';
-        $this->addTab(array("name" => "General1", "content" => $this->form1(), "index" => $this->generateRandomString(), 'search' => 'text', "active" => "active"));
-        $this->addTab(array("name" => "General2", "content" => $this->form2(), "index" => $this->generateRandomString(), 'search' => 'text'));
-        $json = $this->tabs();
+    public function savection() {
+
+        $this->save();
+        $json = json_encode(array("ok"));
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );
     }
 
+
+
     /**
      * @Route("/customers/gettab")
      */
-    public function gettabs() {
-        $this->repository = 'AppBundle:Customer';
-
-        $forms1["model"] = 'model11';
-        $forms1["model"] = array();
+    public function gettabs($id) {
 
 
-        $forms1["fields"][] = array("key" => "email", "id" => $this->repository . ":email", "type" => "input", "templateOptions" => array("type" => 'email', "label" => "Email", "required" => true));
-        $forms1["fields"][] = array("key" => "firstName", "id" => $this->repository . ":firstName", "type" => "input", "defaultValue" => "test", "templateOptions" => array("label" => "First Name", "required" => true));
-        $forms1["fields"][] = array("key" => "lastName", "id" => $this->repository . ":lastName", "type" => "input", "templateOptions" => array("label" => "Last Name", "required" => true));
+        $entity = $this->getDoctrine()
+                ->getRepository($this->repository)
+                ->find($id);
 
-        
-        $forms2["model"] = 'model11';
-        $forms2["model"] = array();
+        $fields["customerCode"] = array("label" => "Customer Code");
+        $fields["customerName"] = array("label" => "Customer Name");
+        $fields["customerAfm"] = array("label" => "Customer Afm");
+        $fields["customerAddress"] = array("label" => "Customer Address");
+        $fields["customerCity"] = array("label" => "Customer City");
 
+        $forms1 = $this->getFormLyFields($entity, $fields);
 
-        $forms2["fields"][] = array("key" => "email1", "id" => $this->repository . ":email1", "type" => "input", "templateOptions" => array("type" => 'email', "label" => "Email", "required" => true));
-        $forms2["fields"][] = array("key" => "firstName1", "id" => $this->repository . ":firstName1", "type" => "input", "defaultValue" => "test", "templateOptions" => array("label" => "First Name", "required" => true));
-        $forms2["fields"][] = array("key" => "lastName1", "id" => $this->repository . ":lastName1", "type" => "input", "templateOptions" => array("label" => "Last Name", "required" => true));
+        $this->addTab(array("title" => "General1", "form" => $forms1, "content" => 'fff', "index" => $this->generateRandomString(), 'search' => 'text', "active" => true));
 
-        $this->addTab(array("title" => "General1","form"=>$forms1,"content"=>'fff',"index" => $this->generateRandomString(), 'search' => 'text', "active" => true));
-        $this->addTab(array("title" => "General2", "form" => $forms2, "content" => 'ddd', "index" => $this->generateRandomString(), 'search' => 'text'));
         $json = $this->tabs();
         return $json;
         //return new Response(
