@@ -21,6 +21,7 @@ class CustomerController extends Main {
         return $this->render('customer/index.html.twig', array(
                     'pagename' => 'Customers',
                     'url' => '/customers/getdatatable',
+                    'view' => '/customers/view',
                     'ctrl' => $this->generateRandomString(),
                     'app' => $this->generateRandomString(),
                     'base_dir' => realpath($this->container->getParameter('kernel.root_dir') . '/..'),
@@ -46,15 +47,12 @@ class CustomerController extends Main {
      * @Route("/customers/save")
      */
     public function savection() {
-
         $this->save();
         $json = json_encode(array("ok"));
         return new Response(
                 $json, 200, array('Content-Type' => 'application/json')
         );
     }
-
-
 
     /**
      * @Route("/customers/gettab")
@@ -73,14 +71,9 @@ class CustomerController extends Main {
         $fields["customerCity"] = array("label" => "Customer City");
 
         $forms1 = $this->getFormLyFields($entity, $fields);
-
-        $this->addTab(array("title" => "General1", "form" => $forms1, "content" => 'fff', "index" => $this->generateRandomString(), 'search' => 'text', "active" => true));
-
+        $this->addTab(array("title" => "General1", "form" => $forms1, "content" => '', "index" => $this->generateRandomString(), 'search' => 'text', "active" => true));
         $json = $this->tabs();
         return $json;
-        //return new Response(
-        //        $json, 200, array('Content-Type' => 'application/json')
-        //);
     }
 
     /**
